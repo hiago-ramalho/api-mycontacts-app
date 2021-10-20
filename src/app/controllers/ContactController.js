@@ -4,17 +4,19 @@ class ContactController {
   async index(request, response) {
     const { orderBy } = request.query;
     const contacts = await ContactsRepository.findAll(orderBy);
+
     response.json(contacts);
   }
 
   async show(request, response) {
     // para obter UM registro
     const { id } = request.params;
+
     const contact = await ContactsRepository.findById(id);
 
     if (!contact) {
       // 404: not found
-      return response.status(404).json({ error: 'User Not Found' });
+      return response.status(404).json({ error: 'Contact Not Found.' });
     }
 
     response.json(contact);
@@ -42,7 +44,7 @@ class ContactController {
       category_id,
     });
 
-    response.json(contact);
+    response.status(201).json(contact);
   }
 
   async update(request, response) {
@@ -54,7 +56,7 @@ class ContactController {
 
     const contactExists = await ContactsRepository.findById(id);
     if (!contactExists) {
-      return response.status(404).json({ error: 'User not found.' });
+      return response.status(404).json({ error: 'Contact not found.' });
     }
 
     if (!name) {
